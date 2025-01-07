@@ -139,7 +139,7 @@ static void DemoSceneUpdate(float dt)
 		// TODO: Update the rotation value.
 
 
-		// TODO: Add code to restart the level when the ë0í key is triggered (when the key changes state from not pressed to pressed).
+		// TODO: Add code to restart the level when the ÅEÅEkey is triggered (when the key changes state from not pressed to pressed).
 
 
 	}
