@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	StubScene.h
-// Author(s):	Doug Schilling (dschilling)
+// Author(s):	Xanna Fuller (xan.fuller)
 // Project:		Project 0
 // Course:		CS230S25
 //

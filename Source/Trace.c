@@ -51,13 +51,13 @@ void TraceInit()
 	// TODO: Open "trace.log" for writing (text mode).
 	// fopen_s:
 	// https://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k(stdio%2Ffopen_s);k(fopen_s);k(DevLang-C%2B%2B);k(TargetOS-Windows)&rd=true
-	fopen_s(&traceFile, traceFileName, "w");
+	fopen_s(&traceFile, traceFileName, "wt");
 
 	// Error handling (implementation details to be determined by the student):
 	// https://msdn.microsoft.com/en-us/library/9t0e6085.aspx
 	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strerror-s-strerror-s-wcserror-s-wcserror-s?f1url=https%3A%2F%2Fmsdn.microsoft.com%2Fquery%2Fdev16.query%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(STRING%2Fstrerror_s);k(strerror_s);k(DevLang-C%2B%2B);k(TargetOS-Windows)%26rd%3Dtrue&view=vs-2019
 	if (!traceFile)
-		perror("TRACE FILE \"%s\" NOT OPENED");
+		printf("ERR: TRACE FILE \"%s\" NOT OPENED", traceFileName);
 }
 
 // Output a message to the Tracing/Logging file.
@@ -75,8 +75,8 @@ void TraceMessage(const char * formatString, ...)
 		va_list vlist;
 		va_start(vlist, formatString);
 
-		vfprintf(traceFile, formatString, vlist);
-		fprintf(traceFile, "\n");
+		vfprintf_s(traceFile, formatString, vlist);
+		fprintf_s(traceFile, "\n");
 	}
 }
 

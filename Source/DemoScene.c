@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	DemoScene.c
-// Author(s):	Doug Schilling (dschilling)
+// Author(s):	Xanna Fuller (xan.fuller)
 // Project:		Project 0
 // Course:		CS230S25
 //
@@ -39,6 +39,30 @@ typedef struct DemoScene
 
 // TODO: Declare Constants:
 
+// DGL_Color Constants:
+static const DGL_Color DGL_Color_Black = { 0.0f, 0.0f, 0.0f, 1.0f };
+static const DGL_Color DGL_Color_White = { 1.0f, 1.0f, 1.0f, 1.0f };
+static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f };
+static const DGL_Color DGL_Color_Green = { 0.0f, 1.0f, 0.0f, 1.0f };
+static const DGL_Color DGL_Color_Blue = { 0.0f, 0.0f, 1.0f, 1.0f };
+static const DGL_Color DGL_Color_Cyan = { 0.0f, 1.0f, 1.0f, 1.0f };
+static const DGL_Color DGL_Color_Magenta = { 1.0f, 0.0f, 1.0f, 1.0f };
+static const DGL_Color DGL_Color_Yellow = { 1.0f, 1.0f, 0.0f, 1.0f };
+
+// Constants used to display objects within the scene:
+static const DGL_Vec2 posColored = { -200.f, 200.f };
+static const DGL_Vec2 posTinted = { 200.f, 200.f };
+static const DGL_Vec2 posTexturedBall = { -200.f, -200.f };
+static const DGL_Vec2 posTexturedSquare = { 200.f, -200.f };
+
+static const DGL_Vec2 scaleColored = { 100.f, 100.f };
+static const DGL_Vec2 scaleTextured = { 100.f, 100.f };
+
+// Constants used to move objects within the scene:
+static const float cameraScrollSpeed = 2.0f;
+static const float spaceshipScrollSpeed = 4.0f;
+static const float uvScrollSpeed = 0.01f;
+static const float rotationSpeed = 0.5f;
 
 //------------------------------------------------------------------------------
 // Private Variables:
@@ -46,6 +70,23 @@ typedef struct DemoScene
 
 // TODO: Declare Variables:
 
+// Variables used for referencing loaded assets.
+static DGL_Mesh* meshColor = NULL;
+static DGL_Mesh* meshTexture = NULL;
+static DGL_Mesh* meshSpaceship = NULL;
+static DGL_Mesh* meshLine = NULL;
+
+static DGL_Texture* textureBall = NULL;
+static DGL_Texture* textureSquare = NULL;
+
+// Variables used for changing the scene.
+static DGL_Vec2 posCamera = { 0, 0 };
+static DGL_Vec2 posSpaceship = { 0.f, 0.f };
+
+static DGL_Vec2 uvOffset = { 0.f, 0.f };
+
+static float alpha = 1.0f;
+static float rotation = 0.0f;
 
 //------------------------------------------------------------------------------
 // Private Function Declarations:
@@ -90,10 +131,56 @@ const Scene* DemoSceneGetInstance(void)
 static void DemoSceneLoad(void)
 {
 	// TODO: Create Meshes:
+	// Create a simple, colored mesh.
+	DGL_Graphics_StartMesh();
+	DGL_Graphics_AddTriangle(
+		& (DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_Red, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Green, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { 0.5f, -0.5f }, & DGL_Color_Blue, & (DGL_Vec2){ 0.0f, 0.0f });
+	DGL_Graphics_AddTriangle(
+		& (DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_Cyan, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { -0.5f, 0.5f }, & DGL_Color_Magenta, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Yellow, & (DGL_Vec2){ 0.0f, 0.0f });
+	meshColor = DGL_Graphics_EndMesh();
+
+	// Create a simple, textured mesh.
+	DGL_Graphics_StartMesh();
+	DGL_Graphics_AddTriangle(
+		& (DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 0.0f, 1.0f },
+		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 1.0f, 0.0f },
+		& (DGL_Vec2) { 0.5f, -0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 1.0f, 1.0f });
+	DGL_Graphics_AddTriangle(
+		&(DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 0.0f, 1.0f },
+		& (DGL_Vec2) { -0.5f, 0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 1.0f, 0.0f });
+	meshTexture = DGL_Graphics_EndMesh();
+	// Create a triangular, colored mesh.
+	DGL_Graphics_StartMesh();
+	DGL_Graphics_AddTriangle(
+		& (DGL_Vec2) { 0.5f, 0.0f }, & DGL_Color_Yellow, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_Red, & (DGL_Vec2){ 0.0f, 0.0f },
+		& (DGL_Vec2) { -0.5f, 0.5f }, & DGL_Color_Red, & (DGL_Vec2){ 0.0f, 0.0f });
+	meshSpaceship = DGL_Graphics_EndMesh();
+	DGL_Graphics_StartMesh();
+	DGL_Graphics_AddVertex(&(DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_White, & (DGL_Vec2){ 0.0f, 0.0f });
+	DGL_Graphics_AddVertex(&(DGL_Vec2) { -0.5f, 0.5f }, & DGL_Color_White, & (DGL_Vec2){ 0.0f, 0.0f });
+	DGL_Graphics_AddVertex(&(DGL_Vec2) { -0.5f, -0.5f }, & DGL_Color_White, & (DGL_Vec2){ 0.0f, 0.0f });
+	DGL_Graphics_AddVertex(&(DGL_Vec2) { 0.5f, -0.5f }, & DGL_Color_White, & (DGL_Vec2){ 0.0f, 0.0f });
+	DGL_Graphics_AddVertex(&(DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_White, & (DGL_Vec2){ 0.0f, 0.0f });
+	meshLine = DGL_Graphics_EndMesh();
 
 
 	// TODO: Load/Create Textures:
+	textureBall = DGL_Graphics_LoadTexture("Assets/ball.png");
 
+	const unsigned char colorsSquare[16] =
+	{
+		255,   0,   0, 255,
+		  0, 255,   0, 255,
+		  0,   0, 255, 255,
+		255, 255, 255, 255
+	};
+	textureSquare = DGL_Graphics_LoadTextureFromMemory(colorsSquare, 2, 2);
 
 }
 
@@ -107,9 +194,18 @@ static void DemoSceneInit()
 	//   alpha
 	//   rotation
 
+	posCamera = (DGL_Vec2){ 0, 0 };
+	posSpaceship = (DGL_Vec2){ 0.f, 0.f };
+
+	uvOffset = (DGL_Vec2){ 0.f, 0.f };
+
+	alpha = 1.0f;
+	rotation = 0.0f;
+
 
 	// TODO: Set the background color and blend mode.
-
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 
 }
 
@@ -121,26 +217,66 @@ static void DemoSceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
+	DGL_Graphics_StartDrawing();
+
 	// Update the scene.
 	if (DGL_Window_HasFocus())
 	{
-		// TODO: Update the camera's position.
+		// Update the camera's position.
+		if (DGL_Input_KeyDown('A'))
+		{
+			posCamera.x -= cameraScrollSpeed;
+		}
+		else if (DGL_Input_KeyDown('D'))
+		{
+			posCamera.x += cameraScrollSpeed;
+		}
+		if (DGL_Input_KeyDown('W'))
+		{
+			posCamera.y += cameraScrollSpeed;
+		}
+		else if (DGL_Input_KeyDown('S'))
+		{
+			posCamera.y -= cameraScrollSpeed;
+		}
 
+		// Update the triangular ("Spaceship") mesh's position.
+		if (DGL_Input_KeyDown(VK_UP))
+			posSpaceship.y += spaceshipScrollSpeed;
+		else if (DGL_Input_KeyDown(VK_DOWN))
+			posSpaceship.y -= spaceshipScrollSpeed;
+		if (DGL_Input_KeyDown(VK_LEFT))
+			posSpaceship.x -= spaceshipScrollSpeed;
+		else if (DGL_Input_KeyDown(VK_RIGHT))
+			posSpaceship.x += spaceshipScrollSpeed;
 
-		// TODO: Update the triangular ("Spaceship") mesh's position.
+		// Update the triangular ("Spaceship") mesh's Alpha value.
+		if (DGL_Input_KeyDown('Z'))
+		{
+			alpha = max(0.0f, alpha - 0.02f);
+		}
+		else if (DGL_Input_KeyDown('X'))
+		{
+			alpha = min(1.0f, alpha + 0.02f);
+		}
 
+		// Update the Ball texture's UV offsets.
+		if (DGL_Input_KeyDown('J'))
+			uvOffset.x -= uvScrollSpeed;
+		else if (DGL_Input_KeyDown('L'))
+			uvOffset.x += uvScrollSpeed;
+		if (DGL_Input_KeyDown('I'))
+			uvOffset.y -= uvScrollSpeed;
+		else if (DGL_Input_KeyDown('K'))
+			uvOffset.y += uvScrollSpeed;
 
-		// TODO: Update the triangular ("Spaceship") mesh's Alpha value.
-
-
-		// TODO: Update the Ball texture's UV offsets.
-
-
-		// TODO: Update the rotation value.
-
+		// Update the rotation value.
+		rotation += rotationSpeed * dt;
 
 		// TODO: Add code to restart the level when the ÅEÅEkey is triggered (when the key changes state from not pressed to pressed).
 
+		if (DGL_Input_KeyTriggered('0'))
+			SceneSystemRestart();
 
 	}
 }
@@ -148,27 +284,57 @@ static void DemoSceneUpdate(float dt)
 // Render any objects associated with the scene.
 void DemoSceneRender(void)
 {
-	// TODO: Update the camera's position every frame.
+	// Update the camera's position every frame.
+	DGL_Camera_SetPosition(&posCamera);
 
+	// Display a simple, colored mesh.
+	DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetTexture(NULL);
+	DGL_Graphics_SetCB_Alpha(1.0f);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetCB_TransformData(&posColored, &scaleColored, 0.f);
+	DGL_Graphics_DrawMesh(meshColor, DGL_DM_TRIANGLELIST);
 
-	// TODO: Display a simple, colored mesh.
+	// Draw a simple, colored mesh with a red (50%) tint.
+	DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetCB_Alpha(1.0f);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 1.0f, 0.0f, 0.0f, 0.5f });
+	DGL_Graphics_SetCB_TransformData(&posTinted, &scaleColored, rotation);
+	DGL_Graphics_DrawMesh(meshColor, DGL_DM_TRIANGLELIST);
 
+	// Draw a simple, textured mesh using the Ball texture.
+	DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetTexture(textureBall);
+	DGL_Graphics_SetCB_Alpha(1.0f);
+	DGL_Graphics_SetCB_TextureOffset(&uvOffset);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetCB_TransformData(&posTexturedBall, &scaleTextured, 0.f);
+	DGL_Graphics_DrawMesh(meshTexture, DGL_DM_TRIANGLELIST);
 
-	// TODO: Draw a simple, colored mesh with a red (50%) tint.
+	// Draw a simple, textured mesh using the 2x2 texture.
+	DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetTextureSamplerData(DGL_TSM_POINT, DGL_AM_WRAP);
+	DGL_Graphics_SetTexture(textureSquare);
+	DGL_Graphics_SetCB_Alpha(1.0f);
+	DGL_Graphics_SetCB_TextureOffset(&(DGL_Vec2) { 0.f, 0.f });
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetCB_TransformData(&posTexturedSquare, &scaleTextured, 0.f);
+	DGL_Graphics_DrawMesh(meshTexture, DGL_DM_TRIANGLELIST);
+	DGL_Graphics_SetTextureSamplerData(DGL_TSM_LINEAR, DGL_AM_WRAP);
 
+	// Draw a triangular, colored mesh.
+	DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetCB_Alpha(alpha);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetCB_TransformData(&posSpaceship, &scaleColored, 0.f);
+	DGL_Graphics_DrawMesh(meshSpaceship, DGL_DM_TRIANGLELIST);
 
-	// TODO: Draw a simple, textured mesh using the Ball texture.
-
-
-	// TODO: Draw a simple, textured mesh using the 2x2 texture.
-
-
-	// TODO: Draw a triangular, colored mesh.
-
-
-	// TODO: Draw a 4-segment line strip.
-
-
+	// Draw a 4-segment line strip.
+	DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	DGL_Graphics_SetCB_Alpha(1.0f);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetCB_TransformData(&(DGL_Vec2) { 0.f, 0.f }, & (DGL_Vec2) { 800.f, 600.f }, 0.f);
+	DGL_Graphics_DrawMesh(meshLine, DGL_DM_LINESTRIP);
 }
 
 // Free any objects associated with the scene.
@@ -180,10 +346,13 @@ static void DemoSceneExit()
 static void DemoSceneUnload(void)
 {
 	// TODO: Free all meshes
+	DGL_Graphics_FreeMesh(&meshColor);
+	DGL_Graphics_FreeMesh(&meshTexture);
+	DGL_Graphics_FreeMesh(&meshSpaceship);
+	DGL_Graphics_FreeMesh(&meshLine);
 
-
-	// TODO: Free all textures
-
-
+	// Free all textures
+	DGL_Graphics_FreeTexture(&textureBall);
+	DGL_Graphics_FreeTexture(&textureSquare);
 }
 
