@@ -187,6 +187,7 @@
     <ClCompile Include="Source\Stub.c" />
     <ClCompile Include="Source\StubScene.c" />
     <ClCompile Include="Source\StubSystem.c" />
+    <ClCompile Include="Source\TextSystem.c" />
     <ClCompile Include="Source\Trace.c" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <ClInclude Include="Source\StubScene.h" />
     <ClInclude Include="Source\StubSystem.h" />
     <ClInclude Include="Source\targetver.h" />
+    <ClInclude Include="Source\TextSystem.h" />
     <ClInclude Include="Source\Trace.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

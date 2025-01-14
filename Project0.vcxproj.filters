@@ -59,6 +59,9 @@
     <ClCompile Include="Source\StubScene.c">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TextSystem.c">
+      <Filter>Engine\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Stub.h">
@@ -96,6 +99,9 @@
     </ClInclude>
     <ClInclude Include="Source\StubScene.h">
       <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TextSystem.h">
+      <Filter>Engine\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

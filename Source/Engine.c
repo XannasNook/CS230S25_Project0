@@ -92,7 +92,7 @@ bool EngineInit()
 		bool success = system->init();
 		if (!success)
 		{
-			return FALSE;
+			return false;
 		}
 	}
 	return true;

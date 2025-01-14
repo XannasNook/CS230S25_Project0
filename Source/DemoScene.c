@@ -11,10 +11,12 @@
 
 #include "stdafx.h"
 #include "DGL.h"
+#include "math.h"
 
 #include "DemoScene.h"
 #include "Scene.h"
 #include "SceneSystem.h"
+#include "TextSystem.h"
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -143,6 +145,11 @@ static void DemoSceneLoad(void)
 		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Yellow, & (DGL_Vec2){ 0.0f, 0.0f });
 	meshColor = DGL_Graphics_EndMesh();
 
+
+
+
+
+
 	// Create a simple, textured mesh.
 	DGL_Graphics_StartMesh();
 	DGL_Graphics_AddTriangle(
@@ -154,6 +161,11 @@ static void DemoSceneLoad(void)
 		& (DGL_Vec2) { -0.5f, 0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 0.0f, 0.0f },
 		& (DGL_Vec2) { 0.5f, 0.5f }, & DGL_Color_Black, & (DGL_Vec2){ 1.0f, 0.0f });
 	meshTexture = DGL_Graphics_EndMesh();
+
+
+
+
+
 	// Create a triangular, colored mesh.
 	DGL_Graphics_StartMesh();
 	DGL_Graphics_AddTriangle(
@@ -171,7 +183,7 @@ static void DemoSceneLoad(void)
 
 
 	// TODO: Load/Create Textures:
-	textureBall = DGL_Graphics_LoadTexture("Assets/ball.png");
+	textureBall = DGL_Graphics_LoadTexture("Assets/Font/underscore.png");
 
 	const unsigned char colorsSquare[16] =
 	{
@@ -204,7 +216,7 @@ static void DemoSceneInit()
 
 
 	// TODO: Set the background color and blend mode.
-	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.25f, 0.5f, 0.25f, 1.0f });
 	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 
 }
@@ -287,6 +299,10 @@ void DemoSceneRender(void)
 	// Update the camera's position every frame.
 	DGL_Camera_SetPosition(&posCamera);
 
+	RenderText("Bee you are awesome and amazing and perfect", (DGL_Vec2) { -400, -150 }, 1.2f * sinf((float)DGL_System_GetTime()));
+	RenderText("abcdefghijklmnopqrstuvwxyz", (DGL_Vec2) { -400, -200 }, 1.2f);
+	RenderText("0123456789()*&!?-=_;:'\",.", (DGL_Vec2) { -400, -250 }, 1.2f);
+
 	// Display a simple, colored mesh.
 	DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
 	DGL_Graphics_SetTexture(NULL);
@@ -303,13 +319,14 @@ void DemoSceneRender(void)
 	DGL_Graphics_DrawMesh(meshColor, DGL_DM_TRIANGLELIST);
 
 	// Draw a simple, textured mesh using the Ball texture.
-	DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
+	/*DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
 	DGL_Graphics_SetTexture(textureBall);
 	DGL_Graphics_SetCB_Alpha(1.0f);
-	DGL_Graphics_SetCB_TextureOffset(&uvOffset);
+	DGL_Graphics_SetCB_TextureOffset(&(DGL_Vec2) { 0.f, 0.f });
 	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
-	DGL_Graphics_SetCB_TransformData(&posTexturedBall, &scaleTextured, 0.f);
-	DGL_Graphics_DrawMesh(meshTexture, DGL_DM_TRIANGLELIST);
+	DGL_Graphics_SetCB_TransformData(&posTexturedBall, &(DGL_Vec2) {100,100}, 0.f);
+	DGL_Graphics_DrawMesh(meshTexture, DGL_DM_TRIANGLELIST);*/
+
 
 	// Draw a simple, textured mesh using the 2x2 texture.
 	DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
