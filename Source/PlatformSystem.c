@@ -2,7 +2,7 @@
 //
 // File Name:	PlatformSystem.c
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 0
+// Project:		Project 2
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -104,7 +104,7 @@ BaseSystem* PlatformSystemGetInstance(HINSTANCE hInstance, int show)
 	DGL_SysInitInfo initInfo;
 	initInfo.mAppInstance = instance.mAppInstance;
 	initInfo.mShow = instance.mCreateWindow;
-	initInfo.mWindowTitle = "CS230S25 Project 0 - Basic Framework";
+	initInfo.mWindowTitle = "CS230S25 Project 2 - Graphics and Physics";
 	initInfo.mWindowWidth = 1024;
 	initInfo.mWindowHeight = 768;
 	initInfo.mMaxFrameRate = 60;
@@ -121,9 +121,9 @@ BaseSystem* PlatformSystemGetInstance(HINSTANCE hInstance, int show)
 	HWND windowHandle = DGL_System_Init(&initInfo);
 	if (windowHandle == NULL)
 	{
-		// Return false if the system was NOT initialized successfully.
+		// Return NULL if the system was NOT initialized successfully.
 		TraceMessage("PlatformSystemInit Error: The DigiPen Graphics Library could not be initialized!");
-		return false;
+		return NULL;
 	}
 
 #ifdef _DEBUG

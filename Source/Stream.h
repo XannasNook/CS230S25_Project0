@@ -2,7 +2,7 @@
 //
 // File Name:	Stream.h
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 1
+// Project:		Project 2
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -91,6 +91,18 @@ float StreamReadFloat(Stream stream);
 //	   then fill the vector with two float values (x & y),
 //	   else do nothing (optionally, write an error message to the trace log).
 void StreamReadVector2D(Stream stream, Vector2D* vector);
+
+// Read a token (a single word) from a file.
+// Suggested steps:
+//	 - Set the first value in tokenBuffer to 0
+//	 - If the stream was opened successfully,
+//	   - Read a string ("%s") into tokenBuffer using fscanf_s()
+//	 - Return tokenBuffer
+// Params:
+//	 stream = The file stream from which to read.
+// Returns:
+//	 Pointer to tokenBuffer
+const char* StreamReadToken(Stream stream);
 
 // Close an opened stream.
 // (NOTE: Do not attempt to close the stream if the pointer is null.)
