@@ -38,25 +38,6 @@ typedef FILE* Stream;
 // Public Structures:
 //------------------------------------------------------------------------------
 
-// An example of the structure to be defined in Transform.c.
-#if 0
-// You are free to change the contents of this structure as long as you do not
-//   change the public interface declared in the header.
-typedef struct Transform
-{
-	// The translation (or world position) of an entity.
-	Vector2D	translation;
-
-	// The rotation (or orientation) of an entity (in radians).
-	float	rotation;
-
-	// The scale (or size) of an entity.
-	// (Hint: This should be initialized to (1, 1).)
-	Vector2D	scale;
-
-} Transform;
-#endif
-
 //------------------------------------------------------------------------------
 // Public Variables:
 //------------------------------------------------------------------------------

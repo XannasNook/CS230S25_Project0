@@ -88,10 +88,7 @@ void TransformFree(Transform** transform)
 // Params:
 //	 transform = Pointer to the Transform component.
 //	 stream = The data stream used for reading.
-void TransformRead(Transform* transform, Stream stream)
-{
-	
-}
+void TransformRead(Transform* transform, Stream stream);
 
 // Get the translation of a Transform component.
 // Params:
@@ -100,7 +97,12 @@ void TransformRead(Transform* transform, Stream stream)
 //	 If the Transform pointer is valid,
 //		then return a pointer to the component's translation,
 //		else return a NULL pointer.
-const Vector2D* TransformGetTranslation(const Transform* transform) { return &(*transform).translation; }
+const Vector2D* TransformGetTranslation(const Transform* transform)
+{
+	if (transform)
+		return &transform->translation;
+	return NULL;
+}
 
 // Get the rotation value of a Transform component.
 // Params:
@@ -109,7 +111,12 @@ const Vector2D* TransformGetTranslation(const Transform* transform) { return &(*
 //	 If the Transform pointer is valid,
 //		then return the component's rotation value (in radians),
 //		else return 0.0f.
-float TransformGetRotation(const Transform* transform) { return transform->rotation; }
+float TransformGetRotation(const Transform* transform)
+{
+	if (transform)
+		return transform->rotation;
+	return 0.f;
+}
 
 // Get the scale of a Transform component.
 // Params:
@@ -118,25 +125,42 @@ float TransformGetRotation(const Transform* transform) { return transform->rotat
 //	 If the Transform pointer is valid,
 //		then return a pointer to the component's scale,
 //		else return a NULL pointer.
-const Vector2D* TransformGetScale(const Transform* transform) { return &transform->scale; }
+const Vector2D* TransformGetScale(const Transform* transform)
+{
+	if (transform)
+		return &transform->scale;
+	return NULL;
+}
 
 // Set the translation of a Transform component.
 // Params:
 //	 transform = Pointer to the Transform component.
 //	 translation = Pointer to the new translation.
-void TransformSetTranslation(Transform* transform, const Vector2D* translation) { transform->translation = *translation; }
+void TransformSetTranslation(Transform* transform, const Vector2D* translation) 
+{ 
+	if (transform && translation)
+		transform->translation = *translation; 
+}
 
 // Set the rotation of a Transform component.
 // Params:
 //	 transform = Pointer to the Transform component.
 //	 rotation = The rotation value (in radians).
-void TransformSetRotation(Transform* transform, float rotation) { transform->rotation = rotation; }
+void TransformSetRotation(Transform* transform, float rotation) 
+{ 
+	if (transform)
+		transform->rotation = rotation; 
+}
 
 // Set the scale of a Transform component.
 // Params:
 //	 transform = Pointer to the Transform component.
 //	 translation = Pointer to the new scale.
-void TransformSetScale(Transform* transform, const Vector2D* scale) { transform->scale = *scale; }
+void TransformSetScale(Transform* transform, const Vector2D* scale) 
+{ 
+	if (transform && scale)
+		transform->scale = *scale;
+}
 
 //------------------------------------------------------------------------------
 // Private Functions:

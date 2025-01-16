@@ -11,12 +11,16 @@
 
 #include "stdafx.h"
 
+#include "DGL.h"
 #include "Stream.h"
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "Mesh.h"
+#include "Sprite.h"
+#include "SpriteSource.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -108,7 +112,21 @@ static void Level1SceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	instance.numLives--;
+	Sprite* sprite = SpriteCreate();
+	Mesh* mesh = MeshCreate();
+	MeshBuildQuad(mesh, .5f, .5f, 1, 1, "Planet");
+	SpriteSource* spriteSource = SpriteSourceCreate();
+	SpriteSourceLoadTexture(spriteSource, 1, 1, "PlanetTexture.png");
+	SpriteSetMesh(sprite, mesh);
+	SpriteSetSpriteSource(sprite, spriteSource);
+	SpriteSetAlpha(sprite, 1);
+
+	Transform* transform = TransformCreate();
+	TransformSetTranslation(transform, &(DGL_Vec2) { 1, 1 });
+	SpriteRender(sprite, transform);
+
+	SpriteFree(&sprite);
+
 	if (instance.numLives <= 0)
 	{
 		SceneSystemSetNext(Level2SceneGetInstance());

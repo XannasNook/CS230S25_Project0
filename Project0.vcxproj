@@ -183,6 +183,7 @@
     <ClCompile Include="Source\DemoScene.c" />
     <ClCompile Include="Source\SceneSystem.c" />
     <ClCompile Include="Source\Sprite.c" />
+    <ClCompile Include="Source\SpriteSource.c" />
     <ClCompile Include="Source\stdafx.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
