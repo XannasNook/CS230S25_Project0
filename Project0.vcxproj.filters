@@ -66,6 +66,9 @@
     <ClCompile Include="Source\Stream.c" />
     <ClCompile Include="Source\Vector2D.c" />
     <ClCompile Include="Source\Transform.c" />
+    <ClCompile Include="Source\Sprite.c">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Stub.h">
