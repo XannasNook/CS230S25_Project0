@@ -59,6 +59,13 @@
     <ClCompile Include="Source\StubScene.c">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level1Scene.c" />
+    <ClCompile Include="Source\Level2Scene.c" />
+    <ClCompile Include="Source\Mesh.c" />
+    <ClCompile Include="Source\SandboxScene.c" />
+    <ClCompile Include="Source\Stream.c" />
+    <ClCompile Include="Source\Vector2D.c" />
+    <ClCompile Include="Source\Transform.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Stub.h">
@@ -97,5 +104,17 @@
     <ClInclude Include="Source\StubScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityFactory.h" />
+    <ClInclude Include="Source\Level1Scene.h" />
+    <ClInclude Include="Source\Level2Scene.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\Physics.h" />
+    <ClInclude Include="Source\SandboxScene.h" />
+    <ClInclude Include="Source\Sprite.h" />
+    <ClInclude Include="Source\SpriteSource.h" />
+    <ClInclude Include="Source\Stream.h" />
+    <ClInclude Include="Source\Transform.h" />
+    <ClInclude Include="Source\Vector2D.h" />
   </ItemGroup>
 </Project>

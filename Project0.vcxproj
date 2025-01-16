@@ -193,6 +193,7 @@
     <ClCompile Include="Source\StubScene.c" />
     <ClCompile Include="Source\StubSystem.c" />
     <ClCompile Include="Source\Trace.c" />
+    <ClCompile Include="Source\Transform.c" />
     <ClCompile Include="Source\Vector2D.c" />
   </ItemGroup>
   <ItemGroup>
