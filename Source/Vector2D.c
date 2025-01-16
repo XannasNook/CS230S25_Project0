@@ -106,7 +106,7 @@ float Vector2DLength(const Vector2D* pVec0)
 // NOTE: The square root function must NOT be called by this function.
 float Vector2DSquareLength(const Vector2D* pVec0)
 {
-	return (pVec0->x * pVec0->x) + (pVec0->y * pVec0->y)
+	return (pVec0->x * pVec0->x) + (pVec0->y * pVec0->y);
 }
 
 // This function returns the distance between two points.
@@ -119,7 +119,7 @@ float Vector2DDistance(const Vector2D* pVec0, const Vector2D* pVec1)
 // NOTE: The square root function must NOT be called by this function.
 float Vector2DSquareDistance(const Vector2D* pVec0, const Vector2D* pVec1)
 {
-	return Vector2DSquareLenght(&(Vector2D) { pVec0->x - pVec1->x, pVec0->y - pVec1->y });
+	return Vector2DSquareLength(&(Vector2D) { pVec0->x - pVec1->x, pVec0->y - pVec1->y });
 }
 
 // This function returns the dot product between pVec0 and pVec1

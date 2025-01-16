@@ -16,6 +16,7 @@
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "Mesh.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:

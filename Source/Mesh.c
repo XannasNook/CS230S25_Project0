@@ -124,7 +124,7 @@ void MeshRender(const Mesh* mesh)
 {
 	if (!mesh)
 		return;
-	DGL_Graphics_DrawMesh(&mesh->meshResource, mesh->drawMode);
+	DGL_Graphics_DrawMesh(mesh->meshResource, mesh->drawMode);
 }
 
 // Free the memory associated with a mesh.
