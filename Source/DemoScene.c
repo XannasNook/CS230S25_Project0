@@ -299,7 +299,7 @@ void DemoSceneRender(void)
 	// Update the camera's position every frame.
 	DGL_Camera_SetPosition(&posCamera);
 
-	RenderText("Bee you are awesome and amazing and perfect", (DGL_Vec2) { -400, -150 }, 1.2f * sinf((float)DGL_System_GetTime()));
+	//RenderText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", (DGL_Vec2) { -400, -150 }, fabsf(1.2f * sinf((float) DGL_System_GetTime())));
 	RenderText("abcdefghijklmnopqrstuvwxyz", (DGL_Vec2) { -400, -200 }, 1.2f);
 	RenderText("0123456789()*&!?-=_;:'\",.", (DGL_Vec2) { -400, -250 }, 1.2f);
 

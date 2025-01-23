@@ -189,6 +189,7 @@
     <ClCompile Include="Source\StubSystem.c" />
     <ClCompile Include="Source\TextSystem.c" />
     <ClCompile Include="Source\Trace.c" />
+    <ClCompile Include="Source\TypeWriterSystem.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Source\targetver.h" />
     <ClInclude Include="Source\TextSystem.h" />
     <ClInclude Include="Source\Trace.h" />
+    <ClInclude Include="Source\TypeWriterSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
