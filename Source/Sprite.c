@@ -15,6 +15,8 @@
 #include "Sprite.h"
 #include "SpriteSource.h"
 #include "Transform.h"
+#include "Trace.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -68,6 +70,9 @@ Sprite* SpriteCreate(void)
 	Sprite* output = (Sprite*) calloc(1, sizeof(Sprite));
 	if (!output)
 		return NULL;
+
+	output->mesh = MeshCreate();
+	output->spriteSource = SpriteSourceCreate();
 	return output;
 }
 
@@ -89,7 +94,14 @@ void SpriteFree(Sprite** sprite)
 // Params:
 //	 sprite = Pointer to the Sprite component.
 //	 stream = The data stream used for reading.
-void SpriteRead(Sprite* sprite, Stream stream);
+void SpriteRead(Sprite* sprite, Stream stream)
+{
+	if (stream && sprite)
+	{
+		sprite->frameIndex = StreamReadInt(stream);
+		sprite->alpha = StreamReadFloat(stream);
+	}
+}
 
 // Render a Sprite (Sprite can be textured or untextured).
 // Params:
@@ -154,7 +166,15 @@ void SpriteSetAlpha(Sprite* sprite, float alpha)
 void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 {
 	if (sprite)
-		sprite->frameIndex = frameIndex;
+	{
+		if (frameIndex > SpriteSourceGetFrameCount(sprite->spriteSource))
+		{
+			sprite->frameIndex = frameIndex;
+			TraceMessage("SpriteSetFrame: frame index = %d", frameIndex);
+		}
+		else
+			TraceMessage("Error: tried setting frame index \"%d\" outside of range 0 - %d", frameIndex, SpriteSourceGetFrameCount(sprite->spriteSource));
+	}
 }
 
 // Set the Sprite's mesh.

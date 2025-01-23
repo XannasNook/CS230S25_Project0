@@ -30,6 +30,8 @@
 // Private Variables:
 //------------------------------------------------------------------------------
 
+static char tokenBuffer[1024];
+
 //------------------------------------------------------------------------------
 // Private Function Declarations:
 //------------------------------------------------------------------------------
@@ -140,6 +142,26 @@ void StreamClose(Stream* stream)
 			TraceMessage("Error: Tried to close stream with pointer that does not exist");
 		stream = NULL;
 	}
+}
+
+// Read a token (a single word) from a file.
+// Suggested steps:
+//	 - Set the first value in tokenBuffer to 0
+//	 - If the stream was opened successfully,
+//	   - Read a string ("%s") into tokenBuffer using fscanf_s()
+//	 - Return tokenBuffer
+// Params:
+//	 stream = The file stream from which to read.
+// Returns:
+//	 Pointer to tokenBuffer
+const char* StreamReadToken(Stream stream)
+{
+	tokenBuffer[0] = 0;
+	if (stream)
+	{
+		fscanf_s(stream, "%s", &tokenBuffer, (unsigned int)_countof(tokenBuffer));
+	}
+	return tokenBuffer; 
 }
 
 //------------------------------------------------------------------------------

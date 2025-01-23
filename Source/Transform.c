@@ -88,7 +88,15 @@ void TransformFree(Transform** transform)
 // Params:
 //	 transform = Pointer to the Transform component.
 //	 stream = The data stream used for reading.
-void TransformRead(Transform* transform, Stream stream);
+void TransformRead(Transform* transform, Stream stream)
+{
+	if (transform && stream)
+	{
+		StreamReadVector2D(stream, &transform->translation);
+		transform->rotation = StreamReadFloat(stream);
+		StreamReadVector2D(stream, &transform->scale);
+	}
+}
 
 // Get the translation of a Transform component.
 // Params:

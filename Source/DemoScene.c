@@ -12,9 +12,12 @@
 #include "stdafx.h"
 #include "DGL.h"
 
-#include "DemoScene.h"
 #include "Scene.h"
+#include "DemoScene.h"
 #include "SceneSystem.h"
+#include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "SandboxScene.h"
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -275,6 +278,12 @@ static void DemoSceneUpdate(float dt)
 
 		// TODO: Add code to restart the level when the ÅEÅEkey is triggered (when the key changes state from not pressed to pressed).
 
+		if (DGL_Input_KeyTriggered('1'))
+			SceneSystemSetNext(Level1SceneGetInstance());
+		if (DGL_Input_KeyTriggered('2'))
+			SceneSystemSetNext(Level2SceneGetInstance());
+		if (DGL_Input_KeyTriggered('9'))
+			SceneSystemSetNext(SandboxSceneGetInstance());
 		if (DGL_Input_KeyTriggered('0'))
 			SceneSystemRestart();
 

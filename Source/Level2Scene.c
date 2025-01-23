@@ -11,15 +11,29 @@
 
 #include "stdafx.h"
 
+#include "DGL.h"
 #include "Stream.h"
 #include "Scene.h"
+#include "Mesh.h"
+#include "Sprite.h"
+#include "SpriteSource.h"
+#include "Transform.h"
+#include "Physics.h"
+#include "Entity.h"
+#include "EntityFactory.h"
+#include "Vector2D.h"
+
 #include "SceneSystem.h"
+#include "DemoScene.h"
+#include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "SandboxScene.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
+
+static const float spaceshipSpeed = 500.f;
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -31,8 +45,8 @@ typedef struct Level2Scene
 	Scene	base;
 
 	// Add any scene-specific variables second.
-	int numLives;
-	int numHealth;
+	Mesh* mesh;
+	Entity* spaceship;
 
 } Level2Scene;
 
@@ -54,6 +68,7 @@ static void Level2SceneUpdate(float dt);
 static void Level2SceneExit(void);
 static void Level2SceneUnload(void);
 static void Level2SceneRender(void);
+static void Level2SceneMovementController(Entity* entity);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -65,8 +80,6 @@ static Level2Scene instance =
 	{ "Level2", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
 
 	// Initialize any scene-specific variables:
-	.numLives = 0,
-	.numHealth = 0
 };
 
 //------------------------------------------------------------------------------
@@ -88,23 +101,23 @@ const Scene* Level2SceneGetInstance(void)
 // Load any resources used by the scene.
 static void Level2SceneLoad(void)
 {
-	Stream stream = StreamOpen("Data/Level2_Lives.txt");
-	if (stream)
-	{
-		instance.numLives = StreamReadInt(stream);
-		StreamClose(&stream);
-	}
+	instance.mesh = MeshCreate();
+	MeshBuildSpaceship(instance.mesh);
 }
 
 // Initialize the entities and variables used by the scene.
 static void Level2SceneInit()
 {
-	Stream stream = StreamOpen("Data/Level2_Health.txt");
-	if (stream)
+	instance.spaceship = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
+
+	if (instance.spaceship)
 	{
-		instance.numHealth = StreamReadInt(stream);
-		StreamClose(&stream);
+		Sprite* sprite = EntityGetSprite(instance.spaceship);
+		SpriteSetMesh(sprite, instance.mesh);
 	}
+
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0, 0, 0 });
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
@@ -112,30 +125,58 @@ static void Level2SceneInit()
 //	 dt = Change in time (in seconds) since the last game loop.
 static void Level2SceneUpdate(float dt)
 {
-	// Tell the compiler that the 'dt' variable is unused.
-	UNREFERENCED_PARAMETER(dt);
+	Level2SceneMovementController(instance.spaceship);
+	EntityUpdate(instance.spaceship, dt);
 
-	if (instance.numHealth-- <= 0)
-	{
-		if (instance.numLives-- > 0)
-			SceneRestart();
-		else
-			SceneSystemSetNext(SandboxSceneGetInstance());
-	}
+	if (DGL_Input_KeyTriggered('Z'))
+		SpriteSetAlpha(EntityGetSprite(instance.spaceship), .5f);
+	if (DGL_Input_KeyTriggered('X'))
+		SpriteSetAlpha(EntityGetSprite(instance.spaceship), 1.f);
+	if (DGL_Input_KeyTriggered('1'))
+		SceneSystemSetNext(Level1SceneGetInstance());
+	if (DGL_Input_KeyTriggered('2'))
+		SceneSystemSetNext(Level2SceneGetInstance());
+	if (DGL_Input_KeyTriggered('9'))
+		SceneSystemSetNext(SandboxSceneGetInstance());
+	if (DGL_Input_KeyTriggered('0'))
+		SceneSystemRestart();	
 }
 
 // Render any objects associated with the scene.
 void Level2SceneRender(void)
 {
+	EntityRender(instance.spaceship);
 }
 
 // Free any objects associated with the scene.
 static void Level2SceneExit()
 {
+	EntityFree(&instance.spaceship);
 }
 
 // Unload any resources used by the scene.
 static void Level2SceneUnload(void)
 {
+	//MeshFree(&instance.mesh);
 }
 
+static void Level2SceneMovementController(Entity* entity)
+{
+	Physics* physics = EntityGetPhysics(entity);
+	Transform* transform = EntityGetTransform(entity);
+
+	if (entity && physics && transform)
+	{
+		Vector2D mousePosScreen = DGL_Input_GetMousePosition();
+		Vector2D mousePos = DGL_Camera_ScreenCoordToWorld(&mousePosScreen);
+
+		Vector2D translation = *TransformGetTranslation(transform);
+		Vector2D* dir = calloc(1, sizeof(Vector2D));
+		Vector2DSub(dir, &mousePos, &translation);
+		Vector2DNormalize(dir, dir);
+		TransformSetRotation(transform, Vector2DToAngleRad(dir));
+		Vector2DScale(dir, dir, spaceshipSpeed);
+		PhysicsSetVelocity(physics, dir);
+		free(dir);
+	}
+}

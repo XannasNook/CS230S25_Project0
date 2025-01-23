@@ -173,10 +173,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine.c" />
+    <ClCompile Include="Source\Entity.c" />
+    <ClCompile Include="Source\EntityFactory.c" />
     <ClCompile Include="Source\Level1Scene.c" />
     <ClCompile Include="Source\Level2Scene.c" />
     <ClCompile Include="Source\Main.c" />
     <ClCompile Include="Source\Mesh.c" />
+    <ClCompile Include="Source\Physics.c" />
     <ClCompile Include="Source\PlatformSystem.c" />
     <ClCompile Include="Source\SandboxScene.c" />
     <ClCompile Include="Source\Scene.c" />

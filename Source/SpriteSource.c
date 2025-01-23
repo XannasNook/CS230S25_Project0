@@ -75,7 +75,8 @@ SpriteSource* SpriteSourceCreate()
 //	 spriteSource = Pointer to the SpriteSource pointer.
 void SpriteSourceFree(SpriteSource** spriteSource)
 {
-	DGL_Graphics_FreeTexture(&(*spriteSource)->texture);
+	if ((*spriteSource)->texture);
+		DGL_Graphics_FreeTexture(&(*spriteSource)->texture);
 	free(*spriteSource);
 	spriteSource = NULL;
 }
