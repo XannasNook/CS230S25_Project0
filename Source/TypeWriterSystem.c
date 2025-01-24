@@ -11,9 +11,11 @@
 
 #include "stdafx.h"
 #include <Windows.h>
+#include "DGL.h"
 
 #include "BaseSystem.h"
 #include "TypeWriterSystem.h"
+#include "TextSystem.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -29,6 +31,7 @@ typedef struct TypeWriterSystem
 	BaseSystem	base;
 
 	// Add any system-specific variables second.
+	char* curWritten;
 
 } TypeWriterSystem;
 
@@ -55,6 +58,13 @@ static TypeWriterSystem instance =
 	{ "TypeWriterSystem", TypeWriterSystemInit, TypeWriterSystemUpdate, TypeWriterSystemRender, TypeWriterSystemExit},
 };
 
+float timer;
+char curWritten[1024];
+char toWrite[1024];
+int pointer;
+DGL_Vec2 position;
+float textScale;
+
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
@@ -70,6 +80,15 @@ BaseSystem* TypeWriterSystemGetInstance()
 	return (BaseSystem*)&instance;
 }
 
+void SetTypeWriter(const char* str, DGL_Vec2 pos, float scale)
+{
+	strcpy_s(toWrite, _countof(toWrite), str);
+	strcpy_s(curWritten, _countof(curWritten), "");
+	position = pos;
+	textScale = scale;
+	timer = 0;
+}
+
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
@@ -80,6 +99,9 @@ BaseSystem* TypeWriterSystemGetInstance()
 static bool TypeWriterSystemInit(void)
 {
 	// Return false if the system was NOT initialized successfully.
+	timer = 0;
+	curWritten[0] = 0;
+	toWrite[0] = 0;
 
 	// Return true if the system was initialized successfully.
 	return true;
@@ -91,12 +113,30 @@ static bool TypeWriterSystemInit(void)
 static void TypeWriterSystemUpdate(float dt)
 {
 	// Tell the compiler that the 'dt' variable is unused.
-	UNREFERENCED_PARAMETER(dt);
+	if (strncmp(curWritten, toWrite, sizeof(toWrite)))
+	{
+		if (timer < .005f)
+		{
+			timer += dt;
+			return;
+		}
+
+		char character = toWrite[pointer];
+		if (character)
+		{
+			curWritten[pointer] = character;
+			curWritten[pointer + 1] = 0;
+			pointer++;
+		}
+		timer = 0;
+	}
 }
 
 // Render any objects associated with the TypeWriter System.
 static void TypeWriterSystemRender(void)
 {
+	if (curWritten)
+		RenderText(curWritten, position, textScale);
 }
 
 // Shutdown the TypeWriter System.

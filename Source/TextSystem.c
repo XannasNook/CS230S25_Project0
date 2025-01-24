@@ -79,10 +79,6 @@ BaseSystem* TextSystemGetInstance()
 	return (BaseSystem*)&instance;
 }
 
-void TextEffect(const char* string, DGL_Vec2 worldPos, float scale)
-{
-}
-
 void RenderText(const char* string, DGL_Vec2 worldPos, float scale)
 {
 	if (*string == 0)

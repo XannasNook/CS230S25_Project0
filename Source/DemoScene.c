@@ -17,6 +17,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "TextSystem.h"
+#include "TypeWriterSystem.h"
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -218,6 +219,7 @@ static void DemoSceneInit()
 	// TODO: Set the background color and blend mode.
 	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.25f, 0.5f, 0.25f, 1.0f });
 	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
+	SetTypeWriter("ABCDEFGHIJKLMNOPQRSTUVWXYZ", (DGL_Vec2) { -400, -100 }, 1.2f);
 
 }
 
@@ -263,9 +265,10 @@ static void DemoSceneUpdate(float dt)
 			posSpaceship.x += spaceshipScrollSpeed;
 
 		// Update the triangular ("Spaceship") mesh's Alpha value.
-		if (DGL_Input_KeyDown('Z'))
+		if (DGL_Input_KeyReleased('Z'))
 		{
-			alpha = max(0.0f, alpha - 0.02f);
+			SetTypeWriter("how are you", (DGL_Vec2) { -400, -100 }, 1.2f);
+
 		}
 		else if (DGL_Input_KeyDown('X'))
 		{
@@ -290,6 +293,7 @@ static void DemoSceneUpdate(float dt)
 		if (DGL_Input_KeyTriggered('0'))
 			SceneSystemRestart();
 
+
 	}
 }
 
@@ -299,7 +303,7 @@ void DemoSceneRender(void)
 	// Update the camera's position every frame.
 	DGL_Camera_SetPosition(&posCamera);
 
-	//RenderText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", (DGL_Vec2) { -400, -150 }, fabsf(1.2f * sinf((float) DGL_System_GetTime())));
+	RenderText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", (DGL_Vec2) { -400, -150 }, fabsf(1.2f * sinf((float) DGL_System_GetTime())));
 	RenderText("abcdefghijklmnopqrstuvwxyz", (DGL_Vec2) { -400, -200 }, 1.2f);
 	RenderText("0123456789()*&!?-=_;:'\",.", (DGL_Vec2) { -400, -250 }, 1.2f);
 

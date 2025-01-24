@@ -52,6 +52,8 @@ typedef struct BaseSystem BaseSystem;
 //	 Pointer to the abstract BaseSystem for this derived System.
 BaseSystem* TypeWriterSystemGetInstance(void);
 
+void SetTypeWriter(const char* str, DGL_Vec2 pos, float scale);
+
 /*----------------------------------------------------------------------------*/
 
 #ifdef __cplusplus

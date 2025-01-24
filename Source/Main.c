@@ -18,6 +18,7 @@
 #include "PlatformSystem.h"
 #include "SceneSystem.h"
 #include "TextSystem.h"
+#include "TypeWriterSystem.h"
 
 //------------------------------------------------------------------------------
 // Main Function:
@@ -36,6 +37,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE prevInstanceH, _
 	EngineAddSystem(PlatformSystemGetInstance(hInstance, show));
 	EngineAddSystem(SceneSystemGetInstance());
 	EngineAddSystem(TextSystemGetInstance());
+	EngineAddSystem(TypeWriterSystemGetInstance());
 
 	// NOTE: Other systems can be initialized later and in any order.
 
