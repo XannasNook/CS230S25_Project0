@@ -22,6 +22,7 @@
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "Vector2D.h"
+#include "Trace.h"
 
 #include "SceneSystem.h"
 #include "DemoScene.h"
@@ -116,7 +117,7 @@ static void Level2SceneInit()
 		SpriteSetMesh(sprite, instance.mesh);
 	}
 
-	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0, 0, 0 });
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0, 0, 0, 1 });
 	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
@@ -157,7 +158,7 @@ static void Level2SceneExit()
 // Unload any resources used by the scene.
 static void Level2SceneUnload(void)
 {
-	//MeshFree(&instance.mesh);
+	MeshFree(&instance.mesh);
 }
 
 static void Level2SceneMovementController(Entity* entity)

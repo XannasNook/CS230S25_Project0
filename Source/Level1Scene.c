@@ -170,8 +170,8 @@ static void Level1SceneExit()
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
-	//SpriteSourceFree(&instance.spriteSource);
-	//MeshFree(&instance.mesh);
+	SpriteSourceFree(&instance.spriteSource);
+	MeshFree(&instance.mesh);
 }
 
 static void Level1SceneMovementController(Entity* entity)

@@ -70,9 +70,6 @@ Sprite* SpriteCreate(void)
 	Sprite* output = (Sprite*) calloc(1, sizeof(Sprite));
 	if (!output)
 		return NULL;
-
-	output->mesh = MeshCreate();
-	output->spriteSource = SpriteSourceCreate();
 	return output;
 }
 
@@ -82,8 +79,6 @@ Sprite* SpriteCreate(void)
 //	 sprite = Pointer to the Sprite pointer.
 void SpriteFree(Sprite** sprite)
 {
-	MeshFree(&(*sprite)->mesh);
-	SpriteSourceFree(&(*sprite)->spriteSource);
 	free(*sprite);
 	sprite = NULL;
 }
@@ -167,7 +162,7 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 {
 	if (sprite)
 	{
-		if (frameIndex > SpriteSourceGetFrameCount(sprite->spriteSource))
+		if (frameIndex < SpriteSourceGetFrameCount(sprite->spriteSource))
 		{
 			sprite->frameIndex = frameIndex;
 			TraceMessage("SpriteSetFrame: frame index = %d", frameIndex);

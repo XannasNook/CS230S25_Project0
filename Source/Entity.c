@@ -121,6 +121,8 @@ void EntityRead(Entity* entity, Stream stream)
 			PhysicsRead(entity->physics, stream);
 		else if (!strncmp(token, "Sprite", _countof("Sprite")))
 			SpriteRead(entity->sprite, stream);
+		else 
+			strcpy_s(entity->name, _countof(entity->name), token);
 	}
 }
 
